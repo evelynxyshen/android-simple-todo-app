@@ -10,6 +10,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import org.apache.commons.io.FileUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -91,18 +94,39 @@ public class MainActivity extends AppCompatActivity {
     private void readItems() {
         File fileDir = getFilesDir();
         File todoFile = new File(fileDir, "todo.txt");
+        items = new ArrayList<String>();
         try {
-            items = new ArrayList<String>(FileUtils.readLines(todoFile));
+            String fileData = FileUtils.readFileToString(todoFile);
+            JSONObject fileJSONObject = new JSONObject(fileData);
+            JSONArray jArr = fileJSONObject.getJSONArray("items");
+            for (int i = 0; i < jArr.length(); i ++) {
+                items.add(jArr.get(i).toString());
+            }
         } catch (IOException e) {
             items = new ArrayList<String>();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
     private void writeItems() {
         File fileDir = getFilesDir();
         File todoFile = new File(fileDir, "todo.txt");
+        JSONObject obj = new JSONObject();
         try {
-            FileUtils.writeLines(todoFile, items);
+            obj.put("name", "todoItems");
+            JSONArray jsonArr = new JSONArray();
+            for (int i = 0; i < items.size(); i ++) {
+                String currentItemText = items.get(i);
+                jsonArr.put(currentItemText);
+            }
+            obj.put("items", jsonArr);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            FileUtils.write(todoFile, obj.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
