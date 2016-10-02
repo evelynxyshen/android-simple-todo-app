@@ -3,4 +3,6 @@
     <string name="etNewPlaceholder">Enter a new item</string>
     <string name="enter_a_new_item_label">Enter a new item</string>
     <string name="add_item_label">Add Item</string>
+    <string name="edit_item_below_label">Edit Item Below:</string>
+    <string name="save_label">Save</string>
 </resources>

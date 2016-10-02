@@ -1,5 +1,6 @@
 package com.example.xiaoying_shin.simpletodo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -39,6 +40,28 @@ public class MainActivity extends AppCompatActivity {
         writeItems();
     }
 
+    private final int REQUEST_CODE = 20;
+
+    public void launchEditView(int itemIndex) {
+        String itemText = items.get(itemIndex);
+        Intent i = new Intent(MainActivity.this, EditItemActivity.class);
+
+        i.putExtra("currentText", itemText);
+        i.putExtra("currentIdx", itemIndex);
+        startActivityForResult(i, REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            String editedItem = data.getExtras().getString("editedItem");
+            int editedItemIdx = data.getExtras().getInt("editedItemIdx", 0);
+            items.set(editedItemIdx, editedItem);
+            itemsAdapter.notifyDataSetChanged();
+            writeItems();
+        }
+    }
+
     private void setupListViewListener() {
         lvItems.setOnItemLongClickListener(
                 new AdapterView.OnItemLongClickListener() {
@@ -49,6 +72,17 @@ public class MainActivity extends AppCompatActivity {
                         itemsAdapter.notifyDataSetChanged();
                         writeItems();
                         return true;
+                    }
+                }
+        );
+
+        lvItems.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView,
+                                                      View view, int pos, long id) {
+                        String itemText = items.get(pos);
+                        launchEditView(pos);
                     }
                 }
         );
