@@ -1,5 +1,7 @@
 package com.example.xiaoying_shin.simpletodo;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +43,23 @@ public class MainActivity extends AppCompatActivity {
         itemsAdapter.add(itemText);
         etNewItem.setText("");
         writeItems();
+    }
+
+    public void onClearAll(View v) {
+        AlertDialog dialog = new AlertDialog.Builder(this)
+            .setTitle("Clear all todo items")
+            .setMessage("Are you sure you want to clear all todo items?")
+            .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    items.clear();
+                    itemsAdapter.notifyDataSetChanged();
+                    writeItems();
+                }
+            })
+            .setNegativeButton("Cancel", null)
+            .create();
+        dialog.show();
     }
 
     private final int REQUEST_CODE = 20;

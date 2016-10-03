@@ -5,4 +5,5 @@
     <string name="add_item_label">Add Item</string>
     <string name="edit_item_below_label">Edit Item Below:</string>
     <string name="save_label">Save</string>
+    <string name="clear_all_label">Clear All</string>
 </resources>
