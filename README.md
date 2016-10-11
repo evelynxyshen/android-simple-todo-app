@@ -36,6 +36,8 @@ Here's a walkthrough of implemented user stories:
 ## Notes
 
 Describe any challenges encountered while building the app.
+* the approach of save to file doesn't work for multiple lines of todo items, change simple save to save json format
+* debug sqlite was a bit tricky
 
 ## License
 
