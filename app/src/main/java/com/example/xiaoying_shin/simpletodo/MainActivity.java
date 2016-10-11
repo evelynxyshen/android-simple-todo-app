@@ -11,16 +11,12 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import org.apache.commons.io.FileUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.facebook.stetho.Stetho;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    ArrayList<TodoItem> itemsObj;
     ArrayList<String> items;
     ArrayAdapter<String> itemsAdapter;
     ListView lvItems;
@@ -29,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Stetho.initializeWithDefaults(this);
+
         lvItems = (ListView)findViewById(R.id.lvItem);
         readItems();
         itemsAdapter = new ArrayAdapter<>(this,
@@ -111,6 +110,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void readItems() {
+        TodoItemDatabaseHelper databaseHelper = TodoItemDatabaseHelper.getInstance(this);
+
+        itemsObj = databaseHelper.getAllTodoItems();
+
+        items = new ArrayList<String>();
+        for (int i = 0; i < itemsObj.size(); i ++) {
+            items.add(itemsObj.get(i).text.toString());
+        }
+
+        /* Old implementation of read from file
         File fileDir = getFilesDir();
         File todoFile = new File(fileDir, "todo.txt");
         items = new ArrayList<String>();
@@ -125,10 +134,19 @@ public class MainActivity extends AppCompatActivity {
             items = new ArrayList<String>();
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     private void writeItems() {
+        TodoItemDatabaseHelper databaseHelper = TodoItemDatabaseHelper.getInstance(this);
+        databaseHelper.deleteAllTodoItems();
+        for (int i = 0; i < items.size(); i ++) {
+            TodoItem newItem = new TodoItem();
+            newItem.text = items.get(i);
+            databaseHelper.addTodoItem(newItem);
+        }
+
+        /* Old implementation of write to file
         File fileDir = getFilesDir();
         File todoFile = new File(fileDir, "todo.txt");
         JSONObject obj = new JSONObject();
@@ -149,5 +167,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
     }
 }
