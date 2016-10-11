@@ -30,8 +30,8 @@ The following **additional** features are implemented:
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
-<img src='http://imgur.com/a/wDlBy' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
+![simple_todo](https://cloud.githubusercontent.com/assets/18543897/19277010/19e8072e-8f8d-11e6-863f-023c083c42c6.gif)
 
 ## Notes
 
